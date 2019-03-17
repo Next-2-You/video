@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<!-- 开发模式下启用，输出更加详细的日志 -->
+	<constant name="struts.devMode" value="true"></constant>
+	<!-- 设置游览器是否开启缓存 一般开发环境下设为false 游览器不缓存 -->
+	<constant name="struts.serve.static.browserCache"
+		value="false"></constant>
+	<!-- 当struts的配置文件更改的时候，自动重新加载该文件，开发环境中使用 -->
+	<constant name="struts.configuration.xml.reload" value="true"></constant>
+	<!-- 开启动态方法调用 -->
+	<constant name="struts.enable.DynamicMethodInvocation"
+		value="true"></constant>
+	<constant name="struts.ognl.allowStaticMethodAccess"
+		value="true"></constant>
+
+	<!-- 主题 -->
+	<constant name="struts.ui.theme" value="simple" />
+
+	<package name="default" namespace="/" extends="struts-default">
+
+
+
+		<!-- class属性是从Spring IoC中获取的 -->
+		<action name="Film_*" class="filmAction" method="{1}">
+			<result name="indexPage">/WEB-INF/views/index.jsp</result>
+			<result name="searchPage">/WEB-INF/views/search.jsp</result>
+			<result name="filmDetailsPage">/WEB-INF/views/filmdetails.jsp</result>
+			<result name="LoginPage">/WEB-INF/views/Login.jsp</result>
+			<result name="resetPage">/WEB-INF/views/reset.jsp</result>
+		</action>
+
+
+		<action name="Classify_*" class="classifyAction" method="{1}">
+			<result name="classifyPage">/WEB-INF/views/classify.jsp</result>
+		</action>
+
+		<action name="Details_*" class="filmDetailsAction" method="{1}">
+			<result name="filmDetailsPage">/WEB-INF/views/filmdetails.jsp</result>
+			<result name="online">/WEB-INF/views/online.jsp</result>
+		</action>
+
+
+
+
+
+
+		<action name="User_*" class="userAction" method="{1}">
+			<result name="chainIndexPage" type="chain">Film_toIndexPage
+			</result>
+			<result name="notLogin">/WEB-INF/views/Login.jsp</result>
+			<result name="noReset">/WEB-INF/views/reset.jsp</result>
+			<result name="input">/WEB-INF/views/reset.jsp</result>
+			<result name="toHome" type="chain">Film_toIndexPage</result>
+
+		</action>
+
+
+
+
+
+
+	</package>
+
+	<!-- struts-default, -->
+	<package name="admin" extends="json-default">
+	
+		<interceptors>
+			<interceptor name="adminInterceptor" class="com.chen.action.admin.interceptor.AdminInterceptor"></interceptor>
+			<interceptor-stack name="myInterceptor">
+				<interceptor-ref name="adminInterceptor">
+				<param name="excludeMethods">doLogin,doLoginOut,toLoginPage</param>
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	
+
+		<global-results>
+			<result name="adminLogin">/WEB-INF/views/admin/adminLogin.jsp</result>
+		</global-results>
+
+
+		<action name="Admin_*" class="adminFilmAction" method="{1}">
+		<interceptor-ref name="myInterceptor"></interceptor-ref>
+			<result name="success" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<result name="filmDetails" type="json">
+				<param name="root">dataMap</param>
+			</result>
+
+			<result name="filmPage">/WEB-INF/views/admin/film.jsp</result>
+			<result name="particularPage">/WEB-INF/views/admin/particular.jsp</result>
+
+			<result name="resourcerPage">/WEB-INF/views/admin/resource.jsp</result>
+		</action>
+
+
+		<action name="manager_*" class="adminAction" method="{1}">
+		<interceptor-ref name="myInterceptor"></interceptor-ref>
+			<result name="showResult" type="json">
+				<param name="root">dataMap</param>
+			</result>
+			<result name="success">/WEB-INF/views/admin/main.jsp</result>
+			<result name="adminLogin">/WEB-INF/views/admin/adminLogin.jsp</result>
+		</action>
+
+
+	</package>
+</struts>

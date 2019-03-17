@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-11-18 13:46:07 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.chen.entities.Starts" table="starts">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <many-to-one name="user" class="com.chen.entities.User" fetch="join">
+            <column name="user_id" />
+        </many-to-one>
+        <many-to-one name="film" class="com.chen.entities.Film" fetch="join">
+            <column name="film_id" />
+        </many-to-one>
+        <property name="starts" type="double">
+            <column name="starts" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+
+	<context:component-scan base-package="com.chen.action,com.chen.dao.impl,com.chen.service.impl"></context:component-scan>
+
+	<!-- 1.配置数据源 -->
+
+	<!-- 数据源 引入属性文件 -->
+	<context:property-placeholder location="classpath:dbconfig.properties" />
+
+	<!-- 阿里 druid数据库连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<!-- 数据库基本信息配置 -->
+		<property name="url" value="${url}" />
+		<property name="username" value="${user}" />
+		<property name="password" value="${password}" />
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="filters" value="${filters}" />
+		<!-- 最大并发连接数 -->
+		<property name="maxActive" value="${maxActive}" />
+		<!-- 初始化连接数量 -->
+		<property name="initialSize" value="${initialSize}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${maxWait}" />
+		<!-- 最小空闲连接数 -->
+		<property name="minIdle" value="${minIdle}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements}" />
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="${removeAbandoned}" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="${logAbandoned}" />
+	</bean>
+
+
+	<!-- 本地会话工厂bean(spring整合hibernate的核心入口) -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:com/chen/entities</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- hibnerate事务管理器,用来在service层面上实现事务管理,而且达到平台无关性 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 事务通知 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 写操作 -->
+			<tx:method name="save*" propagation="REQUIRED" isolation="DEFAULT" />
+			<tx:method name="update*" propagation="REQUIRED" isolation="DEFAULT" />
+			<tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT" />
+			<tx:method name="batch*" propagation="REQUIRED" isolation="DEFAULT" />
+
+			<!-- 读操作 -->
+			<tx:method name="load*" propagation="REQUIRED" isolation="DEFAULT"
+				read-only="true" />
+			<tx:method name="get*" propagation="REQUIRED" isolation="DEFAULT"
+				read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" isolation="DEFAULT"
+				read-only="true" />
+
+			<tx:method name="*" propagation="REQUIRED" isolation="DEFAULT" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- aop配置 -->
+	<aop:config>
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.chen.service.impl.*.*(..))" />
+	</aop:config>
+
+	<bean id="matchVersion46" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="org.apache.lucene.util.Version.LUCENE_45" />
+    </bean> 
+    
+	<!-- 分词器 -->
+    <bean id="ikAnalyzer" class="org.wltea.analyzer.lucene.IKAnalyzer">
+    	<constructor-arg name="useSmart" value="true" />
+    </bean>   
+      
+    <!--数据文件-->  
+    <bean id="luceneDirectory" class="org.apache.lucene.store.SimpleFSDirectory" >     
+        <constructor-arg>       
+            <bean class="java.io.File">         
+                <constructor-arg value="D:\\videoproject" />       
+            </bean>     
+        </constructor-arg>     
+    </bean>   
+    
+    <!-- Lucene 配置类 -->
+  	<bean id="indexWriterConfig" class="org.apache.lucene.index.IndexWriterConfig">
+  		 <constructor-arg name="matchVersion" ref="matchVersion46"/>
+  		 <constructor-arg name="analyzer" ref="ikAnalyzer"/>
+  	</bean>
+
+    <bean id="indexWriter" class="org.apache.lucene.index.IndexWriter">     
+        <constructor-arg ref="luceneDirectory" />  
+        <constructor-arg ref="indexWriterConfig" />
+    </bean>    
+      
+<!--     <bean id="indexReader" class="org.apache.lucene.index.DirectoryReader"> -->
+<!--     	<property name="directory" value="luceneDirectory"/> -->
+<!--     </bean> -->
+      
+<!--    <bean id="indexSearcher" class="org.apache.lucene.search.IndexSearcher">   -->
+<!--       <constructor-arg ref="indexReader" />   -->
+<!--    </bean>   -->
+   
+   <bean id="indexUtil" class="com.chen.util.IndexUtil">
+   		<property name="ikAnalyzer" ref="ikAnalyzer"/>
+   		<property name="indexWriter" ref="indexWriter"/>
+<!--    		<property name="indexSearcher" ref=""/> -->
+<!--    		<property name="filmDao" value="filmDao"></property> -->
+   		<property name="directory" ref="luceneDirectory"></property> 	
+   </bean>
+    
+
+
+</beans>

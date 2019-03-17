@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-11-18 14:36:21 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.chen.entities.Film" table="film">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="filmName" type="java.lang.String">
+            <column name="film_name" />
+        </property>
+        <property name="filmImage" type="java.lang.String">
+            <column name="film_image" />
+        </property>
+        <property name="actor" type="java.lang.String">
+            <column name="actor" />
+        </property>
+        <property name="director" type="java.lang.String">
+            <column name="director" />
+        </property>
+        <property name="introduction" type="java.lang.String">
+            <column name="introduction" />
+        </property>
+        <property name="statrs" type="double">
+            <column name="statrs" />
+        </property>
+        <property name="releaseTime" type="java.util.Date">
+            <column name="release_time" />
+        </property>
+        <property name="isVIP" type="int">
+            <column name="is_vip" />
+        </property>
+        <property name="beanlink" type="java.lang.String">
+            <column name="bean_link" />
+        </property>
+        <property name="statusId" type="int">
+            <column name="status_id" />
+        </property>
+        <many-to-one name="region" class="com.chen.entities.Region" fetch="join">
+            <column name="region_id" />
+        </many-to-one>
+        <many-to-one name="time" class="com.chen.entities.Time" fetch="join">
+            <column name="time_id" />
+        </many-to-one>
+        <many-to-one name="style" class="com.chen.entities.Style" fetch="join">
+            <column name="style_id" />
+        </many-to-one>
+        <set name="typeList" table="film_type" inverse="false" lazy="false">
+            <key>
+                <column name="film_id" />
+            </key>
+            <many-to-many column="type_id" class="com.chen.entities.Type" ></many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-11-18 14:36:21 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.chen.entities.User" table="user">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="username" type="java.lang.String">
+            <column name="username" />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="password" />
+        </property>
+        <property name="email" type="java.lang.String">
+            <column name="email" />
+        </property>
+        <property name="regCode" type="java.lang.String">
+            <column name="reg_code" />
+        </property>
+        <property name="createDate" type="java.util.Date">
+            <column name="create_date" />
+        </property>
+        <property name="headImage" type="java.lang.String">
+            <column name="head_image" />
+        </property>
+        <property name="isUse" type="int">
+            <column name="is_use" />
+        </property>
+        <set name="filmList" table="collection" inverse="false" lazy="false">
+            <key>
+                <column name="user_id" />
+            </key>
+            <many-to-many column="film_id" class="com.chen.entities.Film" />         
+        </set>
+    </class>
+</hibernate-mapping>
