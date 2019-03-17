@@ -71,35 +71,35 @@ public class IndexUtil {
 	
 	//创建电影索引文件
 	public void createIndexFile() throws IOException{
-		
-		createDirectory();
-		
-		//从数据库中采集数据
-		String hql = "from Film";
-		List<Film> queryFilmList = filmDao.findEntityByHQL(hql, null);
-		
-		//Document对象集合
-		List<Document> documents = new ArrayList<>();
-		
-		//将采集到的数据存放成Document对象
-		for (Film film : queryFilmList) {
-			Document document = new Document();
-			//不分词，不索引,要存储 
-			Field id = new Field("id", film.getId().toString(), Field.Store.YES, Field.Index.NOT_ANALYZED);
-			//要分词，要索引，要存储
-			Field filmName = new TextField("filmName",film.getFilmName(),Store.YES);
-			//不分词，不索引，要存储
-			Field introduction = new StoredField("introduction",film.getIntroduction());
-			//不分词，不索引，要存储
-			Field filmImage = new StoredField("filmImage",film.getFilmImage());
 
-			document.add(id);
-			document.add(filmName);
-			document.add(introduction);
-			document.add(filmImage);
-			indexWriter.addDocument(document);
-		}
-		indexWriter.commit();
+			createDirectory();
+			
+			//从数据库中采集数据
+			String hql = "from Film";
+			List<Film> queryFilmList = filmDao.findEntityByHQL(hql, null);
+			
+			//Document对象集合
+			List<Document> documents = new ArrayList<>();
+			
+			//将采集到的数据存放成Document对象
+			for (Film film : queryFilmList) {
+				Document document = new Document();
+				//不分词，不索引,要存储 
+				Field id = new Field("id", film.getId().toString(), Field.Store.YES, Field.Index.NOT_ANALYZED);
+				//要分词，要索引，要存储
+				Field filmName = new TextField("filmName",film.getFilmName(),Store.YES);
+				//不分词，不索引，要存储
+				Field introduction = new StoredField("introduction",film.getIntroduction());
+				//不分词，不索引，要存储
+				Field filmImage = new StoredField("filmImage",film.getFilmImage());
+				document.add(id);
+				document.add(filmName);
+				document.add(introduction);
+				document.add(filmImage);
+				indexWriter.addDocument(document);
+			}
+
+			indexWriter.commit();
 	}
 	
 	//运用索引查询电影
@@ -176,7 +176,7 @@ public class IndexUtil {
 		Field filmName = new TextField("filmName",film.getFilmName(),Store.YES);
 		Field introduction = new StoredField("introduction",film.getIntroduction());
 		Field filmImage = new StoredField("filmImage",film.getFilmImage());
-
+		
 		document.add(id);
 		document.add(filmName);
 		document.add(introduction);

@@ -23,4 +23,7 @@ public class Manager {
 	public void setManagerPasswd(String managerPasswd) {
 		this.managerPasswd = managerPasswd;
 	}
+	
+	
+	
 }

@@ -13,6 +13,7 @@ public class Film {
 	private String director;//导演
 	private String introduction;//简介
 	private double statrs;//星星
+	
 	private Date releaseTime;//上映时间
 	private int isVIP;
 	private String beanlink;//豆瓣链接
@@ -118,4 +119,15 @@ public class Film {
 	public void setTypeList(Set<Type> typeList) {
 		this.typeList = typeList;
 	}
+	@Override
+	public String toString() {
+		return "Film [id=" + id + ", filmName=" + filmName + ", filmImage=" + filmImage + ", actor=" + actor
+				+ ", director=" + director + ", introduction=" + introduction + ", statrs=" + statrs + ", releaseTime="
+				+ releaseTime + ", isVIP=" + isVIP + ", beanlink=" + beanlink + ", statusId=" + statusId + ", region="
+				+ region + ", time=" + time + ", style=" + style + ", typeList=" + typeList + "]";
+	}
+	
+	
+	
+	
 }

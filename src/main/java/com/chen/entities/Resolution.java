@@ -21,5 +21,7 @@ public class Resolution {
 	public void setResolution(String resolution) {
 		this.resolution = resolution;
 	}
-
+	
+	
+	
 }

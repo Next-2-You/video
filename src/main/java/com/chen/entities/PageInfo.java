@@ -48,5 +48,13 @@ public class PageInfo<T> {
 	public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
 	}
+	@Override
+	public String toString() {
+		return "PageInfo [count=" + count + ", pageList=" + pageList + ", pageIndex=" + pageIndex + ", currentPage="
+				+ currentPage + ", pageSize=" + pageSize + ", totalPages=" + totalPages + "]";
+	}
+	
+	
+	
 
 }

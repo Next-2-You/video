@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -149,7 +151,6 @@ public class FilmServiceImpl implements FilmService {
 		PageInfo<Film> supplementPageInfo = supplementPageInfo(pageInfo);
 		return filmDao.findEntityByHQL(sb.toString(), pageInfo.getPageIndex(), pageInfo.getPageSize(), obj);
 	}
-
 
 	@Override
 	public boolean initIndexFile() {

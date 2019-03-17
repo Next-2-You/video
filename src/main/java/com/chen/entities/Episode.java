@@ -10,9 +10,17 @@ public class Episode {
 	private Long id;
 	private String episodeName;//集数名称
 	private Integer episodeNumber;//集数
-	
 	private int statusId;//状态   //1.刪除2.使用中
 	private Film film;
+	
+
+	public int getStatusId() {
+		return statusId;
+	}
+	public void setStatusId(int statusId) {
+		this.statusId = statusId;
+	}
+	
 	
 	public Long getId() {
 		return id;
@@ -38,11 +46,6 @@ public class Episode {
 	public void setEpisodeName(String episodeName) {
 		this.episodeName = episodeName;
 	}
-	public int getStatusId() {
-		return statusId;
-	}
-	public void setStatusId(int statusId) {
-		this.statusId = statusId;
-	}
+	
 
 }

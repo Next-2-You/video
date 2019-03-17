@@ -45,4 +45,8 @@ public class Resource {
 		this.episode = episode;
 	}
 
+	
+	
+	
+
 }

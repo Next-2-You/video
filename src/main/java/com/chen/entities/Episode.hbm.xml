@@ -14,10 +14,10 @@
         <property name="episodeNumber" type="java.lang.Integer">
             <column name="episode_number" />
         </property>
+        
         <property name="statusId" type="int">
             <column name="status_id" />
         </property>
-        
 		  <many-to-one name="film" class="com.chen.entities.Film" fetch="join">
             <column name="film_id" />
         </many-to-one>
