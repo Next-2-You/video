@@ -1,6 +1,6 @@
 # video
 <h3>视频网</h3>
-<h3>PC端运行效果图</h3>
+<h3>PC端运行效果</h3>
 <image src="https://github.com/Next-2-You/ImageRepository/blob/master/video/%E5%89%8D%E5%8F%B01.png" align="center">
 <image src="https://github.com/Next-2-You/ImageRepository/blob/master/video/前台2.png" align="center">
 <image src="https://github.com/Next-2-You/ImageRepository/blob/master/video/前台3.png" align="center">
